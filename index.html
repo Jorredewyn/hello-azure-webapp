@@ -1,7 +1,714 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head><meta charset="UTF-8"><title>Claude Demo</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>colora – maak het mooi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #2d2d2d;
+      background: #fff;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: #f5f0eb;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #5a4a3a;
+      letter-spacing: 0.02em;
+    }
+    .topbar a { color: #5a4a3a; font-weight: 600; text-decoration: underline; }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid #ece8e2;
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      height: 64px;
+    }
+    .logo {
+      grid-column: 2;
+      text-align: center;
+      text-decoration: none;
+    }
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #2d2d2d;
+      text-transform: lowercase;
+    }
+    .logo-tagline {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: #8a7a6a;
+      text-transform: lowercase;
+      display: block;
+      margin-top: -4px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+      font-size: 13px;
+      color: #5a4a3a;
+    }
+    .header-right a { text-decoration: none; color: #5a4a3a; display: flex; align-items: center; gap: 4px; }
+    .header-right a:hover { color: #2d2d2d; }
+
+    /* ── NAV ── */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #ece8e2;
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+    }
+    .nav-inner a {
+      padding: 14px 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #2d2d2d;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .nav-inner a:hover { border-bottom-color: #2d2d2d; }
+    .nav-inner a.active { border-bottom-color: #5a7a5a; color: #5a7a5a; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 520px;
+      background: linear-gradient(135deg, #d4c5b0 0%, #b8a898 40%, #8a7a6a 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg-shapes {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .hero-bg-shapes::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 500px;
+      height: 500px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .hero-bg-shapes::after {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      right: 15%;
+      width: 400px;
+      height: 400px;
+      background: rgba(90,122,90,0.15);
+      border-radius: 50%;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: #5a7a5a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      max-width: 560px;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .hero p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 28px;
+      max-width: 420px;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #fff;
+      color: #2d2d2d;
+      padding: 13px 28px;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .hero-cta:hover { background: #f5f0eb; transform: translateY(-1px); }
+    .hero-cta-secondary {
+      display: inline-block;
+      color: #fff;
+      padding: 13px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: underline;
+      margin-left: 12px;
+    }
+    .hero-date {
+      display: block;
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 64px 24px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 32px;
+    }
+    .section-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #2d2d2d;
+      max-width: 480px;
+      line-height: 1.2;
+    }
+    .section-header a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #5a7a5a;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .section-header a:hover { text-decoration: underline; }
+
+    /* ── CARDS ── */
+    .cards {
+      display: grid;
+      gap: 20px;
+    }
+    .cards-4 { grid-template-columns: repeat(4, 1fr); }
+    .cards-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .card {
+      border-radius: 4px;
+      overflow: hidden;
+      background: #f9f6f2;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+    .card-img-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    .card-body { padding: 16px; }
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a7a6a;
+      margin-bottom: 6px;
+    }
+    .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: #6a6a6a; line-height: 1.5; }
+    .card-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #5a7a5a;
+      text-decoration: none;
+    }
+    .card-link:hover { text-decoration: underline; }
+
+    /* Color swatches on cards */
+    .card-colors {
+      display: flex;
+      gap: 6px;
+      padding: 12px 16px;
+    }
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.7);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+
+    /* ── PROMO BANNER ── */
+    .promo-banner {
+      background: #5a7a5a;
+      color: #fff;
+      padding: 48px 24px;
+    }
+    .promo-banner-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .promo-banner h2 { font-size: 32px; font-weight: 700; max-width: 480px; line-height: 1.2; }
+    .promo-banner p { margin-top: 8px; font-size: 15px; opacity: 0.85; max-width: 420px; }
+    .promo-btn {
+      display: inline-block;
+      background: #fff;
+      color: #5a7a5a;
+      padding: 13px 28px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .promo-btn:hover { background: #f5f0eb; }
+
+    /* ── SERVICES ── */
+    .services { background: #f9f6f2; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 28px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .service-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      background: #f5f0eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .service-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .service-card p { font-size: 13px; color: #6a6a6a; line-height: 1.55; }
+
+    /* ── TRENDING COLOR ── */
+    .trend-section {
+      background: #6b8cb5;
+      color: #fff;
+      padding: 80px 24px;
+    }
+    .trend-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .trend-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 16px;
+    }
+    .trend-inner h2 { font-size: 40px; font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+    .trend-inner p { font-size: 16px; opacity: 0.85; line-height: 1.65; margin-bottom: 28px; }
+    .trend-btn {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.6);
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .trend-btn:hover { background: rgba(255,255,255,0.25); }
+    .trend-visual {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .trend-swatch {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+    }
+    .trend-swatch-name { font-size: 10px; opacity: 0.8; text-align: center; }
+
+    /* ── FOOTER ── */
+    footer { background: #2d2d2d; color: #b0a898; padding: 56px 24px 32px; }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .logo-text { color: #fff; font-size: 24px; }
+    .footer-brand .logo-tagline { color: #8a7a6a; }
+    .footer-brand p { margin-top: 16px; font-size: 13px; line-height: 1.7; color: #8a8a8a; }
+    .footer-col h4 { color: #fff; font-size: 13px; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.05em; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { color: #8a8a8a; text-decoration: none; font-size: 13px; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-social { display: flex; gap: 12px; margin-top: 20px; }
+    .social-icon {
+      width: 36px; height: 36px;
+      background: #3d3d3d;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .social-icon:hover { background: #5a7a5a; }
+    .footer-bottom {
+      border-top: 1px solid #3d3d3d;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #6a6a6a;
+    }
+    .footer-bottom a { color: #6a6a6a; text-decoration: none; }
+    .footer-bottom a:hover { color: #b0a898; }
+  </style>
+</head>
 <body>
-  <h1>Welkom op deze site gemaakt door Claude</h1>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    Geniet nu van <strong>10% korting</strong> — van 4 tot 8 maart &nbsp;·&nbsp; <a href="#">Bekijk de actie</a>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div></div>
+      <a href="#" class="logo">
+        <span class="logo-text">colora</span>
+        <span class="logo-tagline">maak het mooi</span>
+      </a>
+      <div class="header-right">
+        <a href="#">📍 Winkel vinden</a>
+        <a href="#">👤 Mijn colora</a>
+        <a href="#">🌐 NL</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="active">Verf &amp; producten</a>
+      <a href="#">Kleur en inspiratie</a>
+      <a href="#">Advies</a>
+      <a href="#">Vind je schilder</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg-shapes"></div>
+    <div class="hero-content">
+      <span class="hero-badge">Actie – 4 t.m. 8 maart</span>
+      <h1>Geniet nu van 10% korting</h1>
+      <p>Op alle verfproducten uit ons gamma. Spring snel naar je dichtstbijzijnde colora-winkel.</p>
+      <a href="#" class="hero-cta">Bekijk de actie</a>
+      <a href="#" class="hero-cta-secondary">Winkel vinden</a>
+      <span class="hero-date">Geldig van 4 t.m. 8 maart 2026</span>
+    </div>
+  </div>
+
+  <!-- INSPIRATIE KAARTEN -->
+  <section>
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Tijd om je kamer in de verf te zetten</h2>
+        <a href="#">Bekijk alle inspiratie →</a>
+      </div>
+      <div class="cards cards-4">
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#d4c5b0,#b8a898);">🛋️</div>
+          <div class="card-body">
+            <div class="card-label">Woonkamer</div>
+            <h3>Warm en uitnodigend</h3>
+            <p>Aardse tinten die rust en gezelligheid uitstralen.</p>
+            <span class="card-link">Ontdek meer →</span>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#b0c4b0,#7a9a7a);">🛏️</div>
+          <div class="card-body">
+            <div class="card-label">Slaapkamer</div>
+            <h3>Serene groentinten</h3>
+            <p>Connecting Blue en Playful Green voor een rustgevende sfeer.</p>
+            <span class="card-link">Ontdek meer →</span>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#c8d4dc,#8aacbc);">🍳</div>
+          <div class="card-body">
+            <div class="card-label">Keuken</div>
+            <h3>Fris en luchtig</h3>
+            <p>Lichtblauwe accenten voor een moderne keuken.</p>
+            <span class="card-link">Ontdek meer →</span>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#e8ddd0,#d4c5b0);">🚿</div>
+          <div class="card-body">
+            <div class="card-label">Badkamer</div>
+            <h3>Zachte pasteltinten</h3>
+            <p>Soft Peach en Coconut Milk voor een spa-gevoel.</p>
+            <span class="card-link">Ontdek meer →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING COLOR -->
+  <div class="trend-section">
+    <div class="trend-inner">
+      <div>
+        <div class="trend-label">Trendkleur 2026</div>
+        <h2>Ontdek Connecting Blue</h2>
+        <p>Connecting Blue is dé kleur van het jaar. Een diep, kalmerend blauw dat verbinding en rust uitstraalt. Combineer het met warme neutrale tinten voor een tijdloos interieur.</p>
+        <a href="#" class="trend-btn">Bekijk alle trendkleuren</a>
+      </div>
+      <div class="trend-visual">
+        <div class="trend-swatch" style="background:#6b8cb5;">
+          <span class="trend-swatch-name">Connecting Blue</span>
+        </div>
+        <div class="trend-swatch" style="background:#8a6a4a;">
+          <span class="trend-swatch-name">Rooting Brown</span>
+        </div>
+        <div class="trend-swatch" style="background:#7a9a7a;">
+          <span class="trend-swatch-name">Playful Green</span>
+        </div>
+        <div class="trend-swatch" style="background:#9ab0c8;">
+          <span class="trend-swatch-name">Memory Blue</span>
+        </div>
+        <div class="trend-swatch" style="background:#e8c8b0;">
+          <span class="trend-swatch-name">Soft Peach</span>
+        </div>
+        <div class="trend-swatch" style="background:#f0ede8;">
+          <span class="trend-swatch-name">Coconut Milk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMO BANNER -->
+  <div class="promo-banner">
+    <div class="promo-banner-inner">
+      <div>
+        <h2>Maak het mooi met kleuradvies aan huis</h2>
+        <p>Onze kleurexperts komen bij jou thuis en helpen je de perfecte kleur te kiezen voor elke ruimte.</p>
+      </div>
+      <a href="#" class="promo-btn">Maak een afspraak</a>
+    </div>
+  </div>
+
+  <!-- PRODUCTEN -->
+  <section>
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Populaire verfproducten</h2>
+        <a href="#">Alle producten bekijken →</a>
+      </div>
+      <div class="cards cards-3">
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#e8e0d8,#d4ccC4); font-size:48px;">🪣</div>
+          <div class="card-body">
+            <div class="card-label">Muurverf</div>
+            <h3>Premium Muurverf Mat</h3>
+            <p>Dekkend, wasbaar en beschikbaar in meer dan 3000 kleuren. Ideaal voor woonruimtes.</p>
+            <span class="card-link">Bekijk product →</span>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#d8e4d8,#bcd4bc); font-size:48px;">🖌️</div>
+          <div class="card-body">
+            <div class="card-label">Houtverf</div>
+            <h3>Buitenhoutverf Satijn</h3>
+            <p>Beschermt en verfraait hout voor buiten. UV-bestendig voor jarenlange bescherming.</p>
+            <span class="card-link">Bekijk product →</span>
+          </div>
+        </a>
+        <a href="#" class="card">
+          <div class="card-img-placeholder" style="background: linear-gradient(145deg,#e4d8cc,#d0c0b0); font-size:48px;">✨</div>
+          <div class="card-body">
+            <div class="card-label">Grondverf</div>
+            <h3>Universele Grondverf</h3>
+            <p>De perfecte basis voor een optimaal eindresultaat op alle ondergronden.</p>
+            <span class="card-link">Bekijk product →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Hoe kunnen we je helpen?</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🎨</div>
+          <div>
+            <h3>Kleuradvies aan huis</h3>
+            <p>Een kleurexpert komt bij jou thuis en helpt je de perfecte kleurcombinatie te kiezen.</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📍</div>
+          <div>
+            <h3>Winkel vinden</h3>
+            <p>Meer dan 100 colora-winkels in België. Vind de winkel het dichtstbij jou.</p>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🔧</div>
+          <div>
+            <h3>Vind je schilder</h3>
+            <p>Geen zin om zelf te schilderen? Wij koppelen je aan een gecertificeerde vakman.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo" style="text-align:left; display:block;">
+            <span class="logo-text">colora</span>
+            <span class="logo-tagline">maak het mooi</span>
+          </a>
+          <p>Colora is dé verfspecialist van België met meer dan 100 winkels en een ruim gamma aan verf, kleurinspiratie en advies.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon">📘</a>
+            <a href="#" class="social-icon">📸</a>
+            <a href="#" class="social-icon">▶️</a>
+            <a href="#" class="social-icon">📌</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Verf &amp; Producten</h4>
+          <ul>
+            <li><a href="#">Muurverf</a></li>
+            <li><a href="#">Houtverf</a></li>
+            <li><a href="#">Grondverf</a></li>
+            <li><a href="#">Lakken</a></li>
+            <li><a href="#">Beits</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Kleur &amp; Inspiratie</h4>
+          <ul>
+            <li><a href="#">Kleurinspiratie</a></li>
+            <li><a href="#">Trendkleuren</a></li>
+            <li><a href="#">Kleurkaarten</a></li>
+            <li><a href="#">Stijlgidsen</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Service</h4>
+          <ul>
+            <li><a href="#">Kleuradvies</a></li>
+            <li><a href="#">Winkel vinden</a></li>
+            <li><a href="#">Schilder vinden</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Colora. Alle rechten voorbehouden.</span>
+        <div style="display:flex; gap:24px;">
+          <a href="#">Privacybeleid</a>
+          <a href="#">Cookiebeleid</a>
+          <a href="#">Algemene voorwaarden</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
